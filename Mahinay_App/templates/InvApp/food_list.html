@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CraveCampus | Cafeteria Management</title>
+
+    <style>
+        :root {
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --cream: #fffaf5;
+            --ink: #292524;
+            --muted: #78716c;
+            --border: #e7e5e4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: 235px;
+            background: #292524;
+            color: white;
+            padding: 28px 18px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fb923c;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #d6d3d1;
+            margin: 8px 0 36px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #a8a29e;
+            letter-spacing: 1.4px;
+            margin: 20px 10px 12px;
+        }
+
+        .nav-link {
+            display: block;
+            text-decoration: none;
+            color: #e7e5e4;
+            padding: 13px 14px;
+            border-radius: 8px;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .nav-link.active,
+        .nav-link:hover {
+            background: var(--orange);
+            color: white;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            right: 24px;
+            color: #a8a29e;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        main {
+            margin-left: 235px;
+            padding: 30px;
+            max-width: 1800px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .badge {
+            background: #ffedd5;
+            color: #9a3412;
+            padding: 10px 14px;
+            border-radius: 22px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat,
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .stat {
+            padding: 22px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--muted);
+            margin: 12px 0;
+        }
+
+        .stat-number {
+            font-size: 29px;
+            font-weight: bold;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 330px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .panel {
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .panel-head {
+            padding: 21px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-head h2 {
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            font: inherit;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #fed7aa;
+            border-color: var(--orange);
+        }
+
+        .search {
+            margin-bottom: 15px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 630px;
+        }
+
+        th {
+            text-align: left;
+            background: #fafaf9;
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 14px 11px;
+        }
+
+        td {
+            padding: 14px 11px;
+            border-bottom: 1px solid #f0eeec;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .food-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .description {
+            font-size: 12px;
+            color: var(--muted);
+            max-width: 190px;
+            overflow-wrap: anywhere;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .available {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .stockout {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .category {
+            background: #f5f5f4;
+            color: #57534e;
+            border-radius: 6px;
+            padding: 6px 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .primary {
+            background: var(--orange);
+            color: white;
+        }
+
+        .primary:hover {
+            background: var(--orange-dark);
+        }
+
+        .edit-btn {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .secondary {
+            background: #f5f5f4;
+            color: #44403c;
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .actions form {
+            display: inline;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 17px;
+        }
+
+        .alert {
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .edit-row {
+            display: none;
+            background: #fff7ed;
+        }
+
+        .edit-row.open {
+            display: table-row;
+        }
+
+        .edit-row td {
+            padding: 20px;
+        }
+
+        .edit-form {
+            max-width: 570px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 32px 12px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 25px 0;
+        }
+
+        @media (max-width: 1150px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 20px;
+            }
+
+            .subtitle {
+                margin-bottom: 15px;
+            }
+
+            .nav-label,
+            .sidebar-footer {
+                display: none;
+            }
+
+            .sidebar nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .nav-link {
+                margin: 0;
+                padding: 10px;
+            }
+
+            main {
+                margin: 0;
+                padding: 17px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="brand">🍔 CraveCampus</div>
+    <div class="subtitle">Cafeteria Management System</div>
+
+    <div class="nav-label">MAIN MENU</div>
+
+    <nav>
+        <a class="nav-link" href="#dashboard">▦ Dashboard</a>
+        <a class="nav-link active" href="#food-menu">🍽 Food Menu</a>
+        <a class="nav-link" href="#add-food">＋ Add Food Item</a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <strong>CraveCampus</strong><br>
+        Making campus meals easier to manage.<br>
+        © 2026 CraveCampus
+    </div>
+</aside>
+
+<main>
+
+    <header class="topbar">
+        <div>
+            <h1>Cafeteria Dashboard</h1>
+            <p class="muted">
+                Manage food products, prices, and availability.
+            </p>
+        </div>
+
+        <div class="badge">👤 Cafeteria Administrator</div>
+    </header>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <section class="stats" id="dashboard">
+
+        <div class="stat">
+            <div>🍽️</div>
+            <div class="stat-label">Total Food Items</div>
+            <div class="stat-number">{{ foods|length }}</div>
+        </div>
+
+        <div class="stat">
+            <div>✅</div>
+            <div class="stat-label">Available Items</div>
+            <div class="stat-number" id="availableCount">0</div>
+        </div>
+
+        <div class="stat">
+            <div>📦</div>
+            <div class="stat-label">Out of Stock</div>
+            <div class="stat-number" id="outCount">0</div>
+        </div>
+
+    </section>
+
+    <div class="layout">
+
+        <!-- FOOD MENU TABLE -->
+        <section class="panel" id="food-menu">
+
+            <div class="panel-head">
+                <h2>Food Menu Records</h2>
+                <p class="muted">
+                    Search, update, or remove cafeteria products.
+                </p>
+            </div>
+
+            <div class="panel-body">
+
+                <input
+                    id="foodSearch"
+                    class="search"
+                    type="search"
+                    placeholder="🔎 Search food by name, category, or description..."
+                    aria-label="Search food menu"
+                >
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Food Item</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="foodTableBody">
+
+                            {% for food in foods %}
+
+                                <tr
+                                    class="food-row"
+                                    data-status="{% if food.availability_status %}available{% else %}out{% endif %}"
+                                    data-search="{{ food.name|lower }} {{ food.category|lower }} {{ food.description|default:''|lower }}"
+                                >
+
+                                    <td>
+                                        <div class="food-name">
+                                            {{ food.name }}
+                                        </div>
+
+                                        <div class="description">
+                                            {{ food.description|default:"No description available." }}
+                                        </div>
+
+                                        <small style="color:#a8a29e">
+                                            ID: {{ food.food_id }}
+                                        </small>
+                                    </td>
+
+                                    <td>
+                                        <span class="category">
+                                            {{ food.category }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <strong>
+                                            ₱{{ food.price|floatformat:2 }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {% if food.availability_status %}
+                                            <span class="pill available">
+                                                ● Available
+                                            </span>
+                                        {% else %}
+                                            <span class="pill stockout">
+                                                ● Out of Stock
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <div class="actions">
+
+                                            <button
+                                                type="button"
+                                                class="btn edit-btn"
+                                                onclick="toggleEdit('edit-{{ food.food_id }}')"
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'food_delete' food.food_id %}"
+                                                onsubmit="return confirm('Delete this food item?');"
+                                            >
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn delete-btn"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- EDIT FOOD FORM -->
+                                <tr
+                                    id="edit-{{ food.food_id }}"
+                                    class="edit-row"
+                                >
+                                    <td colspan="5">
+
+                                        <div class="edit-form">
+
+                                            <h3 style="margin-bottom:16px">
+                                                Edit {{ food.name }}
+                                            </h3>
+
+                                            <form
+                                                method="post"
+                                                action="{% url 'food_update' food.food_id %}"
+                                            >
+                                                {% csrf_token %}
+
+                                                <div class="form-group">
+                                                    <label for="name-{{ food.food_id }}">
+                                                        Food Name *
+                                                    </label>
+
+                                                    <input
+                                                        id="name-{{ food.food_id }}"
+                                                        type="text"
+                                                        name="name"
+                                                        value="{{ food.name }}"
+                                                        maxlength="100"
+                                                        required
+                                                    >
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="category-{{ food.food_id }}">
+                                                        Category *
+                                                    </label>
+
+                                                    <select
+                                                        id="category-{{ food.food_id }}"
+                                                        name="category"
+                                                        required
+                                                    >
+                                                        <option
+                                                            value="Meals"
+                                                            {% if food.category == "Meals" %}selected{% endif %}
+                                                        >
+                                                            Meals
+                                                        </option>
+
+                                                        <option
+                                                            value="Snacks"
+                                                            {% if food.category == "Snacks" %}selected{% endif %}
+                                                        >
+                                                            Snacks
+                                                        </option>
+
+                                                        <option
+                                                            value="Drinks"
+                                                            {% if food.category == "Drinks" %}selected{% endif %}
+                                                        >
+                                                            Drinks
+                                                        </option>
+
+                                                        <option
+                                                            value="Desserts"
+                                                            {% if food.category == "Desserts" %}selected{% endif %}
+                                                        >
+                                                            Desserts
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="price-{{ food.food_id }}">
+                                                        Price (₱) *
+                                                    </label>
+
+                                                    <input
+                                                        id="price-{{ food.food_id }}"
+                                                        type="number"
+                                                        name="price"
+                                                        min="0"
+                                                        step="0.01"
+                                                        value="{{ food.price }}"
+                                                        required
+                                                    >
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="status-{{ food.food_id }}">
+                                                        Availability Status *
+                                                    </label>
+
+                                                    <select
+                                                        id="status-{{ food.food_id }}"
+                                                        name="availability_status"
+                                                        required
+                                                    >
+                                                        <option
+                                                            value="True"
+                                                            {% if food.availability_status %}selected{% endif %}
+                                                        >
+                                                            Available
+                                                        </option>
+
+                                                        <option
+                                                            value="False"
+                                                            {% if not food.availability_status %}selected{% endif %}
+                                                        >
+                                                            Out of Stock
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="desc-{{ food.food_id }}">
+                                                        Description
+                                                    </label>
+
+                                                    <textarea
+                                                        id="desc-{{ food.food_id }}"
+                                                        name="description"
+                                                    >{{ food.description }}</textarea>
+                                                </div>
+
+                                                <button
+                                                    class="btn primary"
+                                                    type="submit"
+                                                >
+                                                    Save Changes
+                                                </button>
+
+                                                <button
+                                                    class="btn secondary"
+                                                    type="button"
+                                                    onclick="toggleEdit('edit-{{ food.food_id }}')"
+                                                >
+                                                    Cancel
+                                                </button>
+
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="empty">
+                                            <div style="font-size:36px">🍽️</div>
+                                            <strong>No food items yet.</strong>
+                                            <p>Add your first item using the form.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                            <tr id="noResults" style="display:none">
+                                <td colspan="5">
+                                    <div class="empty">
+                                        No matching food items found.
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADD FOOD FORM -->
+        <section class="panel" id="add-food">
+
+            <div class="panel-head">
+                <h2>＋ Add Food Item</h2>
+                <p class="muted">
+                    Add a new cafeteria product.
+                </p>
+            </div>
+
+            <div class="panel-body">
+
+                <p class="hint">
+                    Complete the required fields to add a product to your menu.
+                </p>
+
+                <form method="post" action="{% url 'food_add' %}">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="new-name">Food Name *</label>
+
+                        <input
+                            id="new-name"
+                            type="text"
+                            name="name"
+                            placeholder="e.g. Chicken Burger"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-category">Category *</label>
+
+                        <select
+                            id="new-category"
+                            name="category"
+                            required
+                        >
+                            <option value="">Select category</option>
+                            <option value="Meals">Meals</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="Drinks">Drinks</option>
+                            <option value="Desserts">Desserts</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-price">Price (₱) *</label>
+
+                        <input
+                            id="new-price"
+                            type="number"
+                            name="price"
+                            placeholder="0.00"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-status">Availability Status *</label>
+
+                        <select
+                            id="new-status"
+                            name="availability_status"
+                            required
+                        >
+                            <option value="True">Available</option>
+                            <option value="False">Out of Stock</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-description">Description</label>
+
+                        <textarea
+                            id="new-description"
+                            name="description"
+                            placeholder="Describe the food or beverage..."
+                        ></textarea>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn primary"
+                        style="width:100%"
+                    >
+                        + Add Food to Menu
+                    </button>
+
+                </form>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        CraveCampus Cafeteria Management System · 2026
+    </footer>
+
+</main>
+
+<script>
+    const searchInput = document.getElementById("foodSearch");
+    const rows = Array.from(document.querySelectorAll(".food-row"));
+
+    // Count available and out-of-stock food items.
+    function updateStats() {
+        let available = 0;
+        let out = 0;
+
+        rows.forEach(function(row) {
+            if (row.dataset.status === "available") {
+                available++;
+            } else {
+                out++;
+            }
+        });
+
+        document.getElementById("availableCount").textContent = available;
+        document.getElementById("outCount").textContent = out;
+    }
+
+    // Show or hide the edit form for a food item.
+    function toggleEdit(id) {
+        const row = document.getElementById(id);
+
+        if (row) {
+            row.classList.toggle("open");
+        }
+    }
+
+    // Search food items by name, category, or description.
+    searchInput.addEventListener("input", function() {
+        const query = this.value.toLowerCase().trim();
+        let shown = 0;
+
+        rows.forEach(function(row) {
+            const searchableText = row.dataset.search || "";
+            const match = searchableText.includes(query);
+
+            row.style.display = match ? "" : "none";
+
+            const editRow = row.nextElementSibling;
+
+            if (
+                editRow &&
+                editRow.classList.contains("edit-row") &&
+                !match
+            ) {
+                editRow.classList.remove("open");
+            }
+
+            if (match) {
+                shown++;
+            }
+        });
+
+        const noResults = document.getElementById("noResults");
+
+        if (noResults) {
+            noResults.style.display =
+                rows.length > 0 && shown === 0 ? "" : "none";
+        }
+    });
+
+    // Calculate dashboard totals when the page loads.
+    updateStats();
+</script>
+
+</body>
+</html>
