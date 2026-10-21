@@ -3,15 +3,19 @@ from .models import Food
 from .forms import FoodForm
 
 
-def index(request):
-    return redirect('food_list')
+# Landing page
+def home(request):
+    foods = Food.objects.filter(availability_status=True)
+    return render(request, 'InvApp/home.html', {'foods': foods})
 
 
+# Food management dashboard
 def food_list(request):
     foods = Food.objects.all()
     return render(request, 'InvApp/food_list.html', {'foods': foods})
 
 
+# Add food
 def food_add(request):
     if request.method == 'POST':
         form = FoodForm(request.POST)
@@ -20,7 +24,6 @@ def food_add(request):
             form.save()
             return redirect('food_list')
 
-        # If the form is invalid, show the dashboard again.
         foods = Food.objects.all()
         return render(
             request,
@@ -31,6 +34,7 @@ def food_add(request):
     return redirect('food_list')
 
 
+# Update food
 def food_update(request, food_id):
     food = get_object_or_404(Food, food_id=food_id)
 
@@ -45,12 +49,17 @@ def food_update(request, food_id):
         return render(
             request,
             'InvApp/food_list.html',
-            {'foods': foods, 'form': form, 'editing_food': food}
+            {
+                'foods': foods,
+                'form': form,
+                'editing_food': food
+            }
         )
 
     return redirect('food_list')
 
 
+# Delete food
 def food_delete(request, food_id):
     if request.method == 'POST':
         food = get_object_or_404(Food, food_id=food_id)

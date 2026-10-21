@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mahinay Cafeteria | Home</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fffaf3;
+            color: #33251d;
+            line-height: 1.6;
+        }
+
+        /* NAVIGATION */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d96b27;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #33251d;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #d96b27;
+        }
+
+        .login-btn {
+            background-color: #d96b27;
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 80px 8%;
+            min-height: 480px;
+            background: linear-gradient(
+                120deg,
+                #fff1df,
+                #fffaf3
+            );
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-content .tagline {
+            color: #d96b27;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(38px, 5vw, 60px);
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 span {
+            color: #d96b27;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: #6b5a4e;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .primary-btn {
+            display: inline-block;
+            background-color: #d96b27;
+            color: white;
+            text-decoration: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .primary-btn:hover {
+            background-color: #b95017;
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 480px;
+            height: 330px;
+            object-fit: cover;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(70,40,20,0.15);
+        }
+
+        /* CATEGORIES */
+        .section {
+            padding: 65px 8%;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .section-description {
+            color: #78675b;
+            margin-bottom: 35px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .category-card {
+            padding: 30px 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .category-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .category-card h3 {
+            color: #d96b27;
+            margin-bottom: 5px;
+        }
+
+        /* FEATURED FOOD */
+        .food-section {
+            background-color: #f7eee3;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 35px;
+            text-align: left;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .food-info {
+            padding: 20px;
+        }
+
+        .food-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .food-info p {
+            color: #78675b;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #d96b27;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .empty-menu {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            color: #78675b;
+        }
+
+        /* CALL TO ACTION */
+        .cta {
+            padding: 65px 8%;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            margin-bottom: 25px;
+            color: #78675b;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #33251d;
+            color: white;
+            padding: 30px 8%;
+            text-align: center;
+        }
+
+        footer p {
+            color: #e4d4c8;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .food-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero {
+                padding: 50px 6%;
+            }
+
+            .hero-image img {
+                height: 240px;
+            }
+
+            .category-grid,
+            .food-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section h2,
+            .cta h2 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="logo">🍽️ Mahinay Cafeteria</div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#categories">Categories</a>
+            <a href="#menu">Menu</a>
+            <a href="#about">About</a>
+            <a href="/foods/" class="login-btn">View Menu</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="tagline">Welcome to Mahinay Cafeteria</div>
+
+            <h1>
+                Delicious Food,<br>
+                <span>Happy Moments.</span>
+            </h1>
+
+            <p>
+                Discover delicious meals, tasty snacks, refreshing drinks,
+                and sweet treats. Your next favorite meal is waiting for you!
+            </p>
+
+            <a href="/foods/" class="primary-btn">
+                Explore Our Menu →
+            </a>
+        </div>
+
+        <div class="hero-image">
+            <img
+                src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1000&q=80"
+                alt="A delicious meal served at a table"
+            >
+        </div>
+    </section>
+
+    <!-- FOOD CATEGORIES -->
+    <section class="section" id="categories">
+        <h2>Explore Our Categories</h2>
+
+        <p class="section-description">
+            Something delicious for every craving.
+        </p>
+
+        <div class="category-grid">
+
+            <div class="category-card">
+                <div class="category-icon">🍛</div>
+                <h3>Meals</h3>
+                <p>Filling and delicious meals.</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🍟</div>
+                <h3>Snacks</h3>
+                <p>Quick bites for your breaks.</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🥤</div>
+                <h3>Drinks</h3>
+                <p>Refreshing drinks to enjoy.</p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🍰</div>
+                <h3>Desserts</h3>
+                <p>Sweet treats for your day.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FEATURED FOOD -->
+    <section class="section food-section" id="menu">
+        <h2>Featured on Our Menu</h2>
+
+        <p class="section-description">
+            Check out some of the food available in our cafeteria.
+        </p>
+
+        <div class="food-grid">
+
+            {% for food in foods %}
+                {% if food.availability_status %}
+
+                    <div class="food-card">
+                        <div class="food-info">
+                            <h3>{{ food.name }}</h3>
+
+                            <p>{{ food.description|default:"Freshly prepared and ready to enjoy." }}</p>
+
+                            <div class="price">
+                                ₱{{ food.price }}
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% empty %}
+
+                <div class="empty-menu">
+                    <h3>Our menu is waiting for you!</h3>
+                    <p>Food items will appear here when they are added to the system.</p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <br><br>
+
+        <a href="/foods/" class="primary-btn">
+            View Complete Menu →
+        </a>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="cta" id="about">
+        <h2>Good Food, Great Experience</h2>
+
+        <p>
+            Mahinay Cafeteria brings together tasty food and convenient
+            menu browsing in one place.
+        </p>
+
+        <a href="/foods/" class="primary-btn">
+            Discover Our Menu
+        </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>🍽️ Mahinay Cafeteria</h3>
+
+        <p>
+            Your place for delicious meals and refreshing treats.
+        </p>
+
+        <br>
+
+        <p>&copy; 2026 Mahinay Cafeteria. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
